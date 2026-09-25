@@ -3,11 +3,6 @@ import { WifiSlash, ArrowClockwise, CheckCircle } from "@phosphor-icons/react";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { cn } from "@/lib/utils";
 
-/**
- * Global offline banner. Renders fixed at the top under the header when
- * the device loses connectivity. Briefly shows a "back online" toast-like
- * banner when connection returns.
- */
 export function OfflineBanner() {
   const { online, checking, retry } = useOnlineStatus();
   const [showBack, setShowBack] = useState(false);

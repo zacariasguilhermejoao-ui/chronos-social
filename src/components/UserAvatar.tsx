@@ -72,7 +72,8 @@ export function UserAvatar({ userId, fallbackUrl, fallbackName, className, size 
     };
   }, [userId]);
 
-  const initial = (data.display_name ?? fallbackName ?? "?")[0]?.toUpperCase() ?? "?";
+  const initial =
+    (data.display_name ?? fallbackName ?? "?")[0]?.toUpperCase() ?? "?";
   const url = data.avatar_url ?? fallbackUrl ?? null;
 
   const avatar = (
