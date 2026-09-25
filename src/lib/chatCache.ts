@@ -1,5 +1,3 @@
-// Cache local (localStorage) de últimas mensagens por conversa.
-// Ligeiro, sem dependências. Renderiza a conversa instantaneamente.
 const KEY = (threadId: string) => `chronos.chat.thread.${threadId}.v1`;
 const INBOX_KEY = "chronos.chat.inbox.v1";
 const MAX_MSGS = 40;

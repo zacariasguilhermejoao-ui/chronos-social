@@ -1,11 +1,3 @@
-/**
- * Cache de ecrã em memória (dura toda a sessão da app, sobrevive a
- * desmontagens de rota). Serve para o padrão:
- *   mostrar já o que existe → revalidar em segundo plano.
- *
- * Não substitui a base de dados nem guarda nada sensível: só o último
- * snapshot renderizado por ecrã, mais a posição de scroll.
- */
 type Entry<T> = { data: T; at: number };
 
 const store = new Map<string, Entry<unknown>>();

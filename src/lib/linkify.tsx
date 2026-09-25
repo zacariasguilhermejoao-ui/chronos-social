@@ -1,7 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-// Detecta URLs, #hashtags e @menções em texto livre.
 const TOKEN_RE = /(https?:\/\/[^\s]+|#[\p{L}0-9_]{2,30}|@[a-zA-Z0-9_]{2,30})/gu;
 
 export function linkify(text: string): ReactNode {

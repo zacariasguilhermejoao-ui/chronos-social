@@ -1,5 +1,3 @@
-// Captura um frame inicial do vídeo no cliente e devolve um Blob JPEG
-// para ser usado como thumbnail. Não requer CORS porque o ficheiro é local (File).
 export async function generateVideoThumbnail(file: File, opts?: { seekTo?: number; quality?: number; maxSize?: number }): Promise<Blob | null> {
   const seekTo = opts?.seekTo ?? 0.1;
   const quality = opts?.quality ?? 0.8;
@@ -49,7 +47,6 @@ export async function generateVideoThumbnail(file: File, opts?: { seekTo?: numbe
     video.addEventListener("seeked", capture);
     video.addEventListener("error", () => finish(null));
 
-    // Timeout defensivo
     setTimeout(() => finish(null), 8000);
   });
 }
