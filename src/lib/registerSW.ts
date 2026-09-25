@@ -62,7 +62,6 @@ export async function registerAppSW() {
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") check();
     });
-    // Quando houver uma versão à espera, ativa-a sem forçar reload (sem loops).
     reg.addEventListener("updatefound", () => {
       const worker = reg.installing;
       if (!worker) return;
