@@ -9,7 +9,6 @@ export type BlockedProfile = {
   avatar_url: string | null;
 };
 
-/** Estado de bloqueio entre o utilizador autenticado e outro perfil. */
 export function useBlock(targetUserId: string | undefined) {
   const { user } = useAuth();
   const [blocked, setBlocked] = useState(false);
@@ -65,7 +64,6 @@ export function useBlock(targetUserId: string | undefined) {
   return { blocked, blockedBy, block, unblock, loading, refresh };
 }
 
-/** Lista de utilizadores que eu bloqueei. */
 export function useBlockedList() {
   const { user } = useAuth();
   const [rows, setRows] = useState<BlockedProfile[]>([]);

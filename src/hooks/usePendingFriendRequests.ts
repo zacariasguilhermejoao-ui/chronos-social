@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-/** Nº de pedidos de amizade pendentes recebidos (com atualização em tempo real). */
 export function usePendingFriendRequests() {
   const { user } = useAuth();
   const [count, setCount] = useState(0);

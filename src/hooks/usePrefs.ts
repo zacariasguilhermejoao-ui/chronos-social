@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export type Prefs = {
+type Prefs = {
   largeText: boolean;
   highContrast: boolean;
   reduceMotion: boolean;

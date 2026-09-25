@@ -52,11 +52,6 @@ export function forgetAccount(identifier: string) {
   } catch {}
 }
 
-/**
- * Sempre que a sessão ativa é criada/renovada, guardamos o refresh token mais
- * recente (os tokens rodam a cada refresh; guardar o antigo tornava o login
- * rápido inválido antes dos 7 dias).
- */
 export function syncSavedTokens(session: Session | null) {
   if (!session?.refresh_token || !session.user) return;
   const uid = session.user.id;
