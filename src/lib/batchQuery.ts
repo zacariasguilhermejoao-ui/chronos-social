@@ -1,6 +1,3 @@
-// Agrupa dezenas de pedidos "eu gostei disto?" num único pedido ao servidor.
-// Cada cartão do feed pedia a sua própria linha (N+1). Aqui juntamos todos os
-// pedidos feitos na mesma janela de 40ms num só `in (...)`.
 import { supabase } from "@/integrations/supabase/client";
 
 type Key = string;
@@ -36,7 +33,6 @@ async function flush(key: Key, table: string, column: string, userId: string) {
   entry.resolvers.forEach((r) => r());
 }
 
-/** true/false se o utilizador já interagiu (like, guardado, ...) com este id. */
 export async function batchHas(
   table: string,
   column: string,
@@ -59,7 +55,6 @@ export async function batchHas(
   return cache.get(key)?.get(id) ?? false;
 }
 
-/** Mantém a cache coerente após uma ação otimista do utilizador. */
 export function batchSet(table: string, column: string, id: string, userId: string | null | undefined, value: boolean) {
   if (!userId) return;
   const key = keyOf(table, column, userId);

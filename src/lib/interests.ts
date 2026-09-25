@@ -1,4 +1,3 @@
-// Interesses partilhados entre o registo e o Gestor de Anúncios da Chrónos
 export type Interest = { key: string; label: string; emoji: string };
 
 export const INTERESTS: Interest[] = [

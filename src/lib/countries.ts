@@ -1,9 +1,7 @@
-// Lista de países com indicativo telefónico internacional (E.164)
-// Bandeira gerada por código ISO de 2 letras (regional indicator emoji)
 export type Country = {
-  code: string; // ISO-2
+  code: string;
   name: string;
-  dial: string; // sem o "+"
+  dial: string;
 };
 
 export const COUNTRIES: Country[] = [
