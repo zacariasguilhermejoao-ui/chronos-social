@@ -115,7 +115,6 @@ export function useTheme() {
     };
   }, []);
 
-  // Acompanha o sistema quando a escolha é "automático"
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
     const mq = window.matchMedia("(prefers-color-scheme: light)");
