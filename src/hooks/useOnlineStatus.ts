@@ -1,10 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 
-/**
- * Hook to track the user's online/offline state in real time.
- * Combines navigator.onLine + active connectivity probe (HEAD request)
- * for cases where the browser reports online but the network is dead.
- */
 export function useOnlineStatus() {
   const [online, setOnline] = useState<boolean>(
     typeof navigator !== "undefined" ? navigator.onLine : true

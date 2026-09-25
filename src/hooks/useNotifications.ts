@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
@@ -7,6 +7,8 @@ export type Notification = {
   user_id: string;
   actor_id: string | null;
   type: string;
+  entity_type: string | null;
+  entity_id: string | null;
   data: any;
   read_at: string | null;
   created_at: string;

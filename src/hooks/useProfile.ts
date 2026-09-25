@@ -40,7 +40,6 @@ export function useProfile() {
     fetchProfile();
   }, [fetchProfile]);
 
-  // Realtime: atualizar saldo quando muda
   useEffect(() => {
     if (!user) return;
     const channel = supabase.channel(`profile-rt-${user.id}-${Date.now()}`);
