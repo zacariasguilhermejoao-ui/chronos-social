@@ -19,30 +19,31 @@ export default function Terms() {
       <H2>2. Monetização</H2>
       <UL>
         <li>Os ganhos dependem de atividade real e válida (visualizações, respostas DM)</li>
-        <li>Qualquer manipulação (visualizações falsas, contas duplicadas) é proibida</li>
-        <li>Os valores são creditados em moeda interna; levantamentos são processados manualmente</li>
+        <li>Qualquer manipulação (visualizações falsas, contas múltiplas, bots) leva a perda de ganhos e suspensão</li>
+        <li>Taxas e percentagens podem ser ajustadas com aviso prévio</li>
       </UL>
 
-      <H2>3. Penalizações</H2>
-      <P>Em caso de violação aplicamos, por ordem de gravidade:</P>
+      <H2>3. Conteúdo</H2>
+      <P>
+        Manténs os direitos sobre o conteúdo que publicas, mas concedes à Chrónos uma licença para
+        o apresentar e distribuir na plataforma.
+      </P>
+
+      <H2>4. Contas</H2>
       <UL>
-        <li>Aviso por escrito</li>
-        <li>Limitação temporária de funcionalidades</li>
-        <li>Suspensão da conta</li>
-        <li>Eliminação definitiva e bloqueio de futuros registos</li>
+        <li>És responsável pela segurança da tua conta</li>
+        <li>Podes pedir eliminação a qualquer momento</li>
+        <li>Contas inativas podem ser removidas após período prolongado</li>
       </UL>
 
-      <H2>4. Conteúdo do utilizador</H2>
+      <H2>5. Limitação de responsabilidade</H2>
       <P>
-        Manténs a propriedade do conteúdo que publicas. Concedes à Chrónos uma licença não exclusiva
-        para o exibir, distribuir e otimizar dentro do serviço.
+        A Chrónos é fornecida "tal como está". Não garantimos disponibilidade contínua nem ganhos
+        mínimos.
       </P>
 
-      <H2>5. Alterações</H2>
-      <P>
-        Podemos atualizar estes termos. Avisaremos com antecedência razoável dentro da app antes de
-        mudanças significativas entrarem em vigor.
-      </P>
+      <H2>6. Contacto</H2>
+      <P>suporte@chronos.app</P>
     </LegalPage>
   );
 }

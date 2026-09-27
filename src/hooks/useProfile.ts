@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
@@ -7,54 +7,36 @@ export type Profile = {
   username: string;
   display_name: string;
   avatar_url: string | null;
-  cover_url: string | null;
   bio: string | null;
-  location: string | null;
-  balance_coins: number;
-  total_earned_coins: number;
-  total_spent_coins: number;
   followers_count: number;
+  following_count: number;
+  coins_balance?: number;
+  [key: string]: any;
 };
 
-export function useProfile() {
+export function useProfile(userId?: string) {
   const { user } = useAuth();
+  const id = userId ?? user?.id;
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = useCallback(async () => {
-    if (!user) {
+  useEffect(() => {
+    if (!id) {
       setProfile(null);
       setLoading(false);
       return;
     }
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .maybeSingle();
-    setProfile(data as Profile | null);
-    setLoading(false);
-  }, [user]);
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  useEffect(() => {
-    if (!user) return;
-    const channel = supabase.channel(`profile-rt-${user.id}-${Date.now()}`);
-    channel.on(
-      "postgres_changes",
-      { event: "UPDATE", schema: "public", table: "profiles", filter: `id=eq.${user.id}` },
-      (payload) => {
-        setProfile((prev) => (prev ? { ...prev, ...(payload.new as Profile) } : (payload.new as Profile)));
-      }
-    );
-    channel.subscribe();
+    let alive = true;
+    (async () => {
+      const { data } = await supabase.from("profiles").select("*").eq("id", id).maybeSingle();
+      if (!alive) return;
+      setProfile((data as any) ?? null);
+      setLoading(false);
+    })();
     return () => {
-      supabase.removeChannel(channel);
+      alive = false;
     };
-  }, [user]);
+  }, [id]);
 
-  return { profile, loading, refresh: fetchProfile };
+  return { profile, loading, setProfile };
 }

@@ -1,64 +1,37 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
+import { useAuth } from "./useAuth";
+import { batchHas, batchSet } from "@/lib/batchQuery";
 
-export function useSavedVideo(videoId: string) {
+export function useSavedVideo(videoId: string | undefined) {
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      setSaved(false);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase
-        .from("saved_videos")
-        .select("id")
-        .eq("video_id", videoId)
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!cancelled) setSaved(!!data);
-    })();
-    return () => {
-      cancelled = true;
-    };
+    if (!user || !videoId) return;
+    batchHas("saved_videos", "video_id", videoId, user.id).then(setSaved);
   }, [user, videoId]);
 
-  const toggle = async () => {
-    if (!user) {
-      toast.info("Inicia sessão para guardar vídeos");
-      return;
-    }
-    if (busy) return;
-    setBusy(true);
-    const prev = saved;
-    setSaved(!prev);
+  const toggle = useCallback(async () => {
+    if (!user || !videoId) return;
+    setLoading(true);
+    const next = !saved;
+    setSaved(next);
+    batchSet("saved_videos", "video_id", videoId, user.id, next);
     try {
-      if (prev) {
-        const { error } = await supabase
-          .from("saved_videos")
-          .delete()
-          .eq("video_id", videoId)
-          .eq("user_id", user.id);
-        if (error) throw error;
+      if (next) {
+        await supabase.from("saved_videos").insert({ user_id: user.id, video_id: videoId });
       } else {
-        const { error } = await supabase
-          .from("saved_videos")
-          .insert({ video_id: videoId, user_id: user.id });
-        if (error) throw error;
-        toast.success("Guardado nos favoritos");
+        await supabase.from("saved_videos").delete().eq("user_id", user.id).eq("video_id", videoId);
       }
-    } catch (e: any) {
-      setSaved(prev);
-      toast.error(e?.message ?? "Falhou");
+    } catch {
+      setSaved(!next);
+      batchSet("saved_videos", "video_id", videoId, user.id, !next);
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
-  };
+  }, [user, videoId, saved]);
 
-  return { saved, toggle, busy };
+  return { saved, toggle, loading };
 }
