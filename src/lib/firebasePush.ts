@@ -15,7 +15,6 @@ function isNativeAndroid() {
 
 async function saveToken(token: Token, userId: string) {
   currentToken = token.value;
-
   const { error } = await (supabase as any).from("push_devices").upsert(
     {
       user_id: userId,
@@ -27,7 +26,6 @@ async function saveToken(token: Token, userId: string) {
     },
     { onConflict: "token" },
   );
-
   if (error) console.warn("[push] token save failed", error);
 }
 

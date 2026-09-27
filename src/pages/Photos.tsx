@@ -67,12 +67,16 @@ export default function Photos() {
         <div className="text-center py-16 glass rounded-2xl">
           <ImageIcon className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
           <p className="font-medium">Nenhuma foto ainda</p>
-          <p className="text-xs text-muted-foreground mt-1">Segue pessoas ou publica a primeira foto.</p>
+          <p className="text-xs text-muted-foreground mt-1">Segue pessoas ou publica a tua primeira foto.</p>
         </div>
       )}
 
       {photos.map((p) => (
-        <PhotoCard key={p.id} photo={p} onDelete={(id) => setPhotos((arr) => arr.filter((x) => x.id !== id))} />
+        <PhotoCard
+          key={p.id}
+          photo={p}
+          onDelete={(id) => setPhotos((arr) => arr.filter((x) => x.id !== id))}
+        />
       ))}
     </div>
   );
