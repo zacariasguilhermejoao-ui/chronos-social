@@ -1,13 +1,3 @@
-/**
- * Registo controlado do Service Worker da Chrónos.
- *
- * Regras:
- * - Nunca regista em dev, iframe ou hosts de pré-visualização Lovable.
- * - Kill switch: abrir com ?sw=off remove o SW da app (sem apagar dados).
- * - Verifica atualizações ao arrancar e ao voltar ao ecrã. Sem loops de reload:
- *   a nova versão é aplicada naturalmente no próximo arranque da app.
- */
-
 const SW_URL = "/service-worker.js";
 
 function inIframe() {
@@ -72,6 +62,6 @@ export async function registerAppSW() {
       });
     });
   } catch {
-    /* ignora — a app funciona na mesma sem SW */
+    /* ignora */
   }
 }

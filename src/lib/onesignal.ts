@@ -1,5 +1,3 @@
-// Chrónos — integração OneSignal (Web Push).
-// External ID = id do utilizador no backend, para que a push chegue à pessoa certa.
 import OneSignal from "react-onesignal";
 
 export const ONESIGNAL_APP_ID = "3dbfa19d-ced7-45b5-a5db-1ee51947c649";
@@ -9,7 +7,6 @@ let initPromise: Promise<boolean> | null = null;
 function isSupportedEnv() {
   if (typeof window === "undefined") return false;
   if (!("serviceWorker" in navigator) || !("Notification" in window)) return false;
-  // Não iniciar em dev, dentro de iframes (preview) ou fora de HTTPS
   if (import.meta.env.DEV) return false;
   if (window.top !== window.self) return false;
   if (location.protocol !== "https:" && location.hostname !== "localhost") return false;
@@ -38,7 +35,6 @@ export function initOneSignal(): Promise<boolean> {
   return initPromise;
 }
 
-/** Associa a subscrição atual ao utilizador (External ID). */
 export async function linkPushUser(userId: string) {
   const ok = await initOneSignal();
   if (!ok) return;
@@ -49,7 +45,6 @@ export async function linkPushUser(userId: string) {
   }
 }
 
-/** Desassocia (logout da app). */
 export async function unlinkPushUser() {
   if (!initPromise) return;
   try {
@@ -59,7 +54,6 @@ export async function unlinkPushUser() {
   }
 }
 
-/** Pede permissão de notificações e subscreve. */
 export async function requestPushPermission(): Promise<boolean> {
   const ok = await initOneSignal();
   if (!ok) return false;

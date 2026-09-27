@@ -1,9 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 
 const BUCKET = "comment-audio";
-const SIGNED_URL_TTL = 60 * 60 * 24 * 365 * 5; // ~5 anos
+const SIGNED_URL_TTL = 60 * 60 * 24 * 365 * 5;
 export const MAX_AUDIO_SEC = 60;
-export const MAX_AUDIO_BYTES = 4 * 1024 * 1024; // 4 MB (comprimido opus fica <1MB p/ 60s)
+export const MAX_AUDIO_BYTES = 4 * 1024 * 1024;
 
 export function pickAudioMime(): { mime: string; ext: string } {
   if (typeof MediaRecorder === "undefined") return { mime: "", ext: "webm" };

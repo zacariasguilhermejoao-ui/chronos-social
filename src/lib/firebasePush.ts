@@ -1,8 +1,8 @@
 import { Capacitor } from "@capacitor/core";
 import {
   PushNotifications,
-  type ActionPerformed,
   type Token,
+  type ActionPerformed,
 } from "@capacitor/push-notifications";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,7 +16,6 @@ function isNativeAndroid() {
 async function saveToken(token: Token, userId: string) {
   currentToken = token.value;
 
-  // The push_devices table is created by migration/08_firebase_push.sql.
   const { error } = await (supabase as any).from("push_devices").upsert(
     {
       user_id: userId,

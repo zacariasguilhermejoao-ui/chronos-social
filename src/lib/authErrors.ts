@@ -1,8 +1,3 @@
-/**
- * Distingue uma falha de transporte (sem internet / servidor inacessível) de
- * um erro devolvido pelo servidor de autenticação (credenciais, rate limit...).
- * Um erro do servidor tem sempre `status`; uma falha de fetch não tem.
- */
 export function isTransportError(err: any): boolean {
   if (typeof navigator !== "undefined" && navigator.onLine === false) return true;
   if (typeof err?.status === "number" && err.status > 0) return false;
@@ -14,7 +9,6 @@ export function isTransportError(err: any): boolean {
   );
 }
 
-/** Mensagem exata para o utilizador, sem mascarar a causa real. */
 export function authErrorMessage(err: any): string {
   if (isTransportError(err)) {
     const offline = typeof navigator !== "undefined" && navigator.onLine === false;
