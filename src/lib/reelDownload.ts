@@ -1,11 +1,13 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type DownloadStatus = "pending" | "processing" | "ready" | "failed" | "unavailable";
-
-type EdgeResponse = { status?: DownloadStatus; url?: string | null; error?: string | null };
+type EdgeResponse = {
+  status: "ready" | "processing" | "pending" | "failed" | "unavailable";
+  url?: string;
+  error?: string | null;
+};
 
 async function callEdge(body: Record<string, unknown>): Promise<EdgeResponse> {
-  const { data, error } = await supabase.functions.invoke("reel-download", { body });
+  const { data, error } = await supabase.functions.invoke("process-reel", { body });
   if (error) {
     return { status: "failed", error: error.message };
   }
@@ -29,7 +31,7 @@ async function saveFile(blob: Blob, filename: string) {
       await nav.share({ files: [file] });
       return;
     } catch {
-      /* utilizador cancelou */
+      /* cancel */
     }
   }
   const url = URL.createObjectURL(blob);

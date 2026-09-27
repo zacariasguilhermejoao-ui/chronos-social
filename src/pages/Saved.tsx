@@ -60,7 +60,7 @@ export default function Saved() {
   return (
     <div className="p-4 animate-fade-in">
       <h1 className="font-display font-bold text-2xl mb-4 flex items-center gap-2">
-        <Bookmark className="w-6 h-6 text-warning" weight="fill" />
+        <Bookmark className="w-6 h-6 text-warning" />
         Guardados
       </h1>
       <div className="grid grid-cols-3 gap-1.5">
@@ -74,15 +74,14 @@ export default function Saved() {
               className="aspect-[9/16] rounded-xl overflow-hidden bg-secondary relative group"
             >
               {v.thumbnail_url ? (
-                <img src={v.thumbnail_url} alt={v.title} className="w-full h-full object-cover" loading="lazy" />
+                <img src={v.thumbnail_url} alt={v.title} className="w-full h-full object-cover" />
               ) : (
-                <video src={v.video_url} className="w-full h-full object-cover" muted preload="metadata" />
+                <div className="w-full h-full grid place-items-center">
+                  <Film className="w-6 h-6 text-muted-foreground" />
+                </div>
               )}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                <p className="text-[11px] text-white font-medium line-clamp-2">{v.title}</p>
-              </div>
-              <div className="absolute top-1.5 right-1.5">
-                <Film className="w-3.5 h-3.5 text-white/90" />
+              <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/70 to-transparent">
+                <p className="text-[10px] text-white truncate">{v.title}</p>
               </div>
             </Link>
           );
