@@ -3,49 +3,46 @@ import { Play } from "@/lib/icons";
 
 const cache = new Map<string, string>();
 
-interface Props {
+export function VideoThumb({
+  src,
+  poster,
+  alt = "",
+  className = "",
+}: {
   src: string;
   poster?: string | null;
-  className?: string;
   alt?: string;
-}
-
-export function VideoThumb({ src, poster, className = "", alt = "" }: Props) {
-  const [thumb, setThumb] = useState<string | null>(poster || cache.get(src) || null);
+  className?: string;
+}) {
+  const [thumb, setThumb] = useState<string | null>(() => (poster ? poster : cache.get(src) ?? null));
   const [canvasFailed, setCanvasFailed] = useState(false);
+  const [near, setNear] = useState(false);
+  const hostRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [near, setNear] = useState<boolean>(!!poster || cache.has(src));
-  const hostRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (near) return;
-    const el = hostRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setNear(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "300px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [near]);
-
-  useEffect(() => {
-    if (!near) return;
     if (poster) {
       setThumb(poster);
       return;
     }
-    const cached = cache.get(src);
-    if (cached) {
-      setThumb(cached);
+    if (cache.has(src)) {
+      setThumb(cache.get(src)!);
       return;
     }
+    const el = hostRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setNear(true);
+      },
+      { rootMargin: "400px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [src, poster]);
 
+  useEffect(() => {
+    if (poster || !near || cache.has(src) || canvasFailed) return;
     let cancelled = false;
     const video = document.createElement("video");
     videoRef.current = video;
@@ -101,7 +98,7 @@ export function VideoThumb({ src, poster, className = "", alt = "" }: Props) {
       video.removeEventListener("error", onError);
       video.src = "";
     };
-  }, [src, poster, near]);
+  }, [src, poster, near, canvasFailed]);
 
   if (thumb) {
     return <img src={thumb} alt={alt} loading="lazy" className={className} />;

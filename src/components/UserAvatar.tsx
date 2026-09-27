@@ -72,52 +72,31 @@ export function UserAvatar({ userId, fallbackUrl, fallbackName, className, size 
     };
   }, [userId]);
 
-  const initial =
-    (data.display_name ?? fallbackName ?? "?")[0]?.toUpperCase() ?? "?";
   const url = data.avatar_url ?? fallbackUrl ?? null;
+  const name = data.display_name ?? fallbackName ?? "?";
+  const src = url ? optimizedImage(url, size * 2) : null;
+  const initial = (name || "?").trim().charAt(0).toUpperCase();
 
-  const avatar = (
-    <div
-      className={cn(
-        "rounded-full bg-gradient-violet grid place-items-center overflow-hidden shrink-0",
-        className
-      )}
-      style={{ width: size, height: size }}
-    >
-      {url ? (
+  return (
+    <div className={cn("relative shrink-0", className)} style={{ width: size, height: size }}>
+      {src ? (
         <img
-          src={optimizedImage(url, Math.max(64, size * 2), 60)}
-          alt=""
-          width={size}
-          height={size}
+          src={src}
+          alt={name}
+          className="w-full h-full rounded-full object-cover bg-secondary"
           loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            const img = e.currentTarget;
-            if (url && img.src !== url) img.src = url;
-            else img.style.display = "none";
-          }}
         />
       ) : (
-        <span className="font-display font-bold text-white" style={{ fontSize: size * 0.42 }}>
+        <div
+          className="w-full h-full rounded-full bg-secondary grid place-items-center font-display font-bold text-muted-foreground"
+          style={{ fontSize: Math.max(12, size * 0.4) }}
+        >
           {initial}
-        </span>
+        </div>
+      )}
+      {online && (
+        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-background" />
       )}
     </div>
-  );
-
-  if (!online) return avatar;
-
-  const dot = Math.max(9, Math.round(size * 0.26));
-  return (
-    <span className="relative inline-block shrink-0" style={{ width: size, height: size }}>
-      {avatar}
-      <span
-        aria-label="Online"
-        className="absolute bottom-0 right-0 rounded-full bg-primary border-2 border-background"
-        style={{ width: dot, height: dot }}
-      />
-    </span>
   );
 }

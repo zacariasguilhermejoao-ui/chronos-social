@@ -1,3 +1,10 @@
+/**
+ * Camada de comportamento "app nativa" da Chrónos.
+ * Bloqueia comportamentos típicos de browser (menu de contexto, arrastar,
+ * seleção por toque longo, zoom por duplo toque/pinça) mantendo campos de
+ * texto totalmente funcionais (copiar/colar/selecionar).
+ */
+
 const EDITABLE_SELECTOR =
   'input, textarea, select, [contenteditable=""], [contenteditable="true"], .allow-select, .selectable';
 
@@ -7,6 +14,7 @@ export function isEditableTarget(target: EventTarget | null): boolean {
   return !!el.closest(EDITABLE_SELECTOR);
 }
 
+/** Vibração curta em ações importantes (ignorada quando não suportada). */
 export function haptic(pattern: number | number[] = 12) {
   try {
     if (typeof navigator !== "undefined" && "vibrate" in navigator) {
