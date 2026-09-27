@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import chronosLogoAsset from "@/assets/chronos-c.png.asset.json";
+const chronosLogo = chronosLogoAsset.url;
 import { Gift } from "@/lib/icons";
 
 type Referrer = { id: string; username: string; display_name: string; avatar_url: string | null };
@@ -31,6 +33,7 @@ export default function Invite() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 text-center max-w-md mx-auto bg-gradient-hero">
+      <img src={chronosLogo} alt="Chrónos" className="w-20 h-20 object-contain mb-3" />
       <h1 className="font-display font-bold text-3xl mb-1">
         Chrónos<span className="text-money">.</span>
       </h1>

@@ -1,12 +1,12 @@
 import { SettingsPage, Section, Row } from "./SettingsLayout";
 import { Switch } from "@/components/ui/switch";
-import { usePrefs } from "@/hooks/usePrefs";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { usePrefs } from "@/hooks/usePrefs";
+import { useAuth } from "@/hooks/useAuth";
 import { requestPushPermission } from "@/lib/onesignal";
 import { initFirebasePush } from "@/lib/firebasePush";
 import { Capacitor } from "@capacitor/core";
-import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function NotificationsSettings() {
   const { prefs, update } = usePrefs();

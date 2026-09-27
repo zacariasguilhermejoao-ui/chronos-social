@@ -62,8 +62,8 @@ export default function AppearanceSettings() {
                 <Icon className={cn("w-5 h-5", selected && "text-primary")} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-[15px]">{o.label}</p>
-                <p className="text-[13px] text-muted-foreground">{o.desc}</p>
+                <p className="font-semibold text-sm">{o.label}</p>
+                <p className="text-xs text-muted-foreground">{o.desc}</p>
               </div>
               {selected && <Check className="w-5 h-5 text-primary shrink-0" />}
             </button>
@@ -72,19 +72,8 @@ export default function AppearanceSettings() {
       </Section>
 
       <Section title="Pré-visualização">
-        <div className="p-4 grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <Preview mode="light" />
-            <p className={cn("text-[13px] text-center", resolved === "light" ? "text-primary font-semibold" : "text-muted-foreground")}>
-              Claro
-            </p>
-          </div>
-          <div className="space-y-2">
-            <Preview mode="dark" />
-            <p className={cn("text-[13px] text-center", resolved === "dark" ? "text-primary font-semibold" : "text-muted-foreground")}>
-              Escuro
-            </p>
-          </div>
+        <div className="p-4">
+          <Preview mode={resolved} />
         </div>
       </Section>
     </SettingsPage>

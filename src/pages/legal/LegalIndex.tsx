@@ -53,6 +53,10 @@ export default function LegalIndex() {
           );
         })}
       </div>
+
+      <p className="text-center text-xs text-muted-foreground mt-6">
+        Chrónos · documentos sujeitos a atualização
+      </p>
     </div>
   );
 }

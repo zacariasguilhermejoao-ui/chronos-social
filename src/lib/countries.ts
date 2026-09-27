@@ -1,8 +1,4 @@
-export type Country = {
-  code: string;
-  name: string;
-  dial: string;
-};
+export type Country = { code: string; name: string; dial: string };
 
 export const COUNTRIES: Country[] = [
   { code: "AO", name: "Angola", dial: "244" },

@@ -37,7 +37,6 @@ export const ANGOLA_PROVINCES: Record<string, string[]> = {
   Cuanza_Norte: ["N'dalatando", "Cazengo", "Golungo Alto", "Lucala"],
   Cuanza_Sul: ["Sumbe", "Gabela", "Porto Amboim", "Quibala", "Waku Kungo"],
   Cunene: ["Ondjiva", "Cahama", "Curoca", "Namacunde"],
-  Huila_Sul: ["Chicomba", "Jamba", "Quilengues"],
   Malanje: ["Malanje", "Cacuso", "Calandula", "Cangandala"],
   Moxico: ["Luena", "Camanongue", "Léua", "Luchazes"],
   Namibe: ["Moçâmedes", "Bibala", "Camucuio", "Tômbwa"],
