@@ -41,7 +41,10 @@ export default function Search() {
           .from("follows")
           .select("following_id")
           .eq("follower_id", user.id)
-          .in("following_id", data.map((d) => d.id));
+          .in(
+            "following_id",
+            data.map((d) => d.id)
+          );
         setFollowingSet(new Set((fol ?? []).map((f) => f.following_id)));
       }
     }, 250);
