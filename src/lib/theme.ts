@@ -1,3 +1,10 @@
+/**
+ * Chrónos — Sistema de temas (claro / escuro / automático)
+ * ---------------------------------------------------------
+ * • Todas as cores vivem em variáveis CSS (ver src/index.css).
+ * • Preferência guardada no dispositivo (localStorage) e na conta (profiles.theme).
+ * • Sem "flash": o tema é aplicado por um script inline no index.html.
+ */
 import { supabase } from "@/integrations/supabase/client";
 import { useCallback, useEffect, useState } from "react";
 
