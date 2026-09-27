@@ -63,16 +63,12 @@ export function OfflineBanner() {
           onClick={retry}
           disabled={checking}
           className={cn(
-            "shrink-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold",
-            "bg-foreground text-background hover:opacity-90 transition disabled:opacity-60"
+            "shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-2.5 py-1.5 text-xs font-semibold",
+            checking && "opacity-60"
           )}
         >
-          <ArrowClockwise
-            size={14}
-            weight="bold"
-            className={checking ? "animate-spin" : ""}
-          />
-          {checking ? "..." : "Tentar"}
+          <ArrowClockwise size={14} className={checking ? "animate-spin" : ""} />
+          Tentar
         </button>
       </div>
     </div>
