@@ -31,11 +31,10 @@ export default function Pages() {
 
   return (
     <div className="max-w-xl mx-auto animate-fade-in pb-24">
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border px-3 py-2 flex items-center gap-2">
+      <div className="sticky top-0 z-10 glass px-4 py-3 flex items-center gap-3 border-b border-border/40">
         <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="w-9 h-9 grid place-items-center rounded-full hover:bg-secondary/60"
+          onClick={() => navigate("/me")}
+          className="p-1.5 rounded-full hover:bg-secondary/60"
           aria-label="Voltar"
         >
           <ArrowLeft className="w-5 h-5" />

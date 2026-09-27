@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ArrowLeft, Mail } from "@/lib/icons";
-import chronosLogoAsset from "@/assets/chronos-c.png.asset.json";
-const chronosLogo = chronosLogoAsset.url;
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -59,7 +57,6 @@ export default function ForgotPassword() {
           <ArrowLeft className="w-4 h-4" /> Voltar
         </button>
 
-        <img src={chronosLogo} alt="Chrónos" className="w-16 h-16 object-contain mb-3" />
         <h1 className="font-display font-bold text-2xl mb-1">Recuperar password</h1>
         <p className="text-muted-foreground text-sm mb-6 max-w-xs">
           Enviamos-te um link para criar uma nova password.

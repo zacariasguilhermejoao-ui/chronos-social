@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ArrowLeft, KeyRound } from "@/lib/icons";
-import chronosLogoAsset from "@/assets/chronos-c.png.asset.json";
-const chronosLogo = chronosLogoAsset.url;
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -60,7 +58,6 @@ export default function ResetPassword() {
           <ArrowLeft className="w-4 h-4" /> Voltar
         </button>
 
-        <img src={chronosLogo} alt="Chrónos" className="w-16 h-16 object-contain mb-3" />
         <h1 className="font-display font-bold text-2xl mb-1">Nova password</h1>
         <p className="text-muted-foreground text-sm mb-6 max-w-xs">
           Define uma nova password para a tua conta.

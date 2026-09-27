@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import chronosLogoAsset from "@/assets/chronos-c.png.asset.json";
 import { Download, Share, Plus, Smartphone, CheckCircle2 } from "@/lib/icons";
 
 type BIPEvent = Event & {
@@ -50,11 +49,6 @@ export default function Install() {
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4 py-8">
       <Card className="w-full max-w-md p-6 space-y-6">
         <div className="flex flex-col items-center text-center space-y-3">
-          <img
-            src={chronosLogoAsset.url}
-            alt="Chrónos"
-            className="w-20 h-20 rounded-2xl shadow-lg"
-          />
           <h1 className="text-2xl font-bold">Instala o Chrónos</h1>
           <p className="text-sm text-muted-foreground">
             Instala a app no teu telefone para acesso rápido, ecrã cheio e
