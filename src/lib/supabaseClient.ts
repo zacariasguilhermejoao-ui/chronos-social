@@ -1,5 +1,3 @@
-// Cliente Supabase da Chrónos — aponta para o projeto próprio (tdehdxwdechsadpfencc).
-// Este módulo substitui "@/integrations/supabase/client" através de um alias no vite.config.ts.
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 

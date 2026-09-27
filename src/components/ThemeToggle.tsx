@@ -2,7 +2,6 @@ import { Sun, Moon } from "@/lib/icons";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
-/** Botão sol/lua — alterna entre tema claro e escuro. */
 export function ThemeToggle({ className }: { className?: string }) {
   const { resolved, toggle } = useTheme();
   const isDark = resolved === "dark";

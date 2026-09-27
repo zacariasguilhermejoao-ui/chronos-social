@@ -2,10 +2,6 @@ import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Users } from "@/lib/icons";
 
-/**
- * A lista de grupos foi unificada em /messages (DMs + grupos juntos).
- * Esta rota agora só redireciona para manter os links antigos vivos.
- */
 export default function Groups() {
   useEffect(() => {
     /* redirect via <Navigate/> below */
@@ -13,10 +9,6 @@ export default function Groups() {
   return <Navigate to="/messages" replace />;
 }
 
-/**
- * Reutilizado por GroupChat.tsx e outras vistas que mostram o avatar do grupo.
- * Mantido aqui para não partir imports existentes.
- */
 export function GroupAvatar({ url, name, size = 44 }: { url?: string | null; name: string; size?: number }) {
   const initials = name
     .split(" ")
