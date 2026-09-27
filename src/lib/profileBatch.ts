@@ -7,49 +7,42 @@ export type MiniProfile = {
   avatar_url: string | null;
 };
 
-const WINDOW_MS = 30;
-const CHUNK = 200;
-
 const cache = new Map<string, MiniProfile>();
 const inflight = new Map<string, Promise<MiniProfile | null>>();
-let queue = new Set<string>();
-let timer: number | null = null;
+const queue = new Set<string>();
 let resolvers: Array<() => void> = [];
+let timer: number | null = null;
+const WINDOW_MS = 20;
 
 async function flush() {
   timer = null;
-  const ids = [...queue];
-  queue = new Set();
-  const done = resolvers;
+  const ids = Array.from(queue);
+  queue.clear();
+  const rs = resolvers;
   resolvers = [];
-
-  for (let i = 0; i < ids.length; i += CHUNK) {
-    const slice = ids.slice(i, i + CHUNK);
+  if (!ids.length) {
+    rs.forEach((r) => r());
+    return;
+  }
+  try {
     const { data } = await supabase
       .from("profiles")
-      .select("id,username,display_name,avatar_url")
-      .in("id", slice);
-    (data ?? []).forEach((p: any) => cache.set(p.id, p as MiniProfile));
-    slice.forEach((id) => {
-      if (!cache.has(id)) {
-        cache.set(id, { id, username: null, display_name: null, avatar_url: null });
-      }
-    });
+      .select("id, username, display_name, avatar_url")
+      .in("id", ids);
+    (data ?? []).forEach((p: any) => cache.set(p.id, p));
+  } catch {
+    /* ignore */
   }
-  done.forEach((r) => r());
+  rs.forEach((r) => r());
 }
 
-export function peekProfile(id: string): MiniProfile | undefined {
-  return cache.get(id);
+export function getProfileCached(id: string): MiniProfile | null {
+  return cache.get(id) ?? null;
 }
 
-export function primeProfile(p: MiniProfile) {
-  if (p?.id) cache.set(p.id, p);
-}
-
-export function getProfile(id: string): Promise<MiniProfile | null> {
-  const hit = cache.get(id);
-  if (hit) return Promise.resolve(hit);
+export function fetchProfile(id: string): Promise<MiniProfile | null> {
+  if (!id) return Promise.resolve(null);
+  if (cache.has(id)) return Promise.resolve(cache.get(id)!);
   const running = inflight.get(id);
   if (running) return running;
 
@@ -65,5 +58,8 @@ export function getProfile(id: string): Promise<MiniProfile | null> {
 
 export function updateProfileCache(p: Partial<MiniProfile> & { id: string }) {
   const cur = cache.get(p.id);
-  cache.set(p.id, { ...(cur ?? { id: p.id, username: null, display_name: null, avatar_url: null }), ...p });
+  cache.set(p.id, {
+    ...(cur ?? { id: p.id, username: null, display_name: null, avatar_url: null }),
+    ...p,
+  });
 }

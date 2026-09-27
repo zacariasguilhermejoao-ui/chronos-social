@@ -1,64 +1,60 @@
-import { supabase } from "@/integrations/supabase/client";
-
+/**
+ * Debounced batch lookups for boolean presence (likes, saves, follows).
+ * Collects IDs for ~16ms then fires a single .in() query per table.
+ */
 type Key = string;
-
-const WINDOW_MS = 40;
-const CHUNK = 200;
-
-const pending = new Map<Key, { ids: Set<string>; resolvers: Array<() => void>; timer: number | null }>();
+const pending = new Map<Key, Set<string>>();
+const resolvers = new Map<Key, Array<(map: Map<string, boolean>) => void>>();
 const cache = new Map<Key, Map<string, boolean>>();
+let timers = new Map<Key, number>();
 
-function keyOf(table: string, column: string, userId: string) {
-  return `${table}|${column}|${userId}`;
+function keyOf(table: string, col: string, userId: string) {
+  return `${table}|${col}|${userId}`;
 }
 
-async function flush(key: Key, table: string, column: string, userId: string) {
-  const entry = pending.get(key);
-  if (!entry) return;
-  pending.delete(key);
-  const ids = [...entry.ids];
-  const store = cache.get(key) ?? new Map<string, boolean>();
-  cache.set(key, store);
+export function batchHas(table: string, col: string, id: string, userId: string): Promise<boolean> {
+  const k = keyOf(table, col, userId);
+  const cached = cache.get(k)?.get(id);
+  if (cached !== undefined) return Promise.resolve(cached);
 
-  for (let i = 0; i < ids.length; i += CHUNK) {
-    const slice = ids.slice(i, i + CHUNK);
-    const { data } = await supabase
-      .from(table as any)
-      .select(column)
-      .eq("user_id", userId)
-      .in(column, slice);
-    const hit = new Set((data ?? []).map((r: any) => r[column] as string));
-    for (const id of slice) store.set(id, hit.has(id));
-  }
-  entry.resolvers.forEach((r) => r());
+  if (!pending.has(k)) pending.set(k, new Set());
+  pending.get(k)!.add(id);
+
+  return new Promise((resolve) => {
+    if (!resolvers.has(k)) resolvers.set(k, []);
+    resolvers.get(k)!.push((map) => resolve(!!map.get(id)));
+    if (!timers.has(k)) {
+      timers.set(
+        k,
+        window.setTimeout(async () => {
+          const ids = Array.from(pending.get(k) ?? []);
+          pending.delete(k);
+          timers.delete(k);
+          const map = cache.get(k) ?? new Map<string, boolean>();
+          try {
+            const { supabase } = await import("@/integrations/supabase/client");
+            const { data } = await supabase
+              .from(table as any)
+              .select(col)
+              .eq("user_id", userId)
+              .in(col, ids);
+            ids.forEach((id) => map.set(id, false));
+            (data ?? []).forEach((row: any) => map.set(row[col], true));
+          } catch {
+            ids.forEach((id) => map.set(id, false));
+          }
+          cache.set(k, map);
+          const rs = resolvers.get(k) ?? [];
+          resolvers.delete(k);
+          rs.forEach((r) => r(map));
+        }, 16),
+      );
+    }
+  });
 }
 
-export async function batchHas(
-  table: string,
-  column: string,
-  id: string,
-  userId: string | null | undefined,
-): Promise<boolean> {
-  if (!userId) return false;
-  const key = keyOf(table, column, userId);
-  const cached = cache.get(key)?.get(id);
-  if (cached !== undefined) return cached;
-
-  let entry = pending.get(key);
-  if (!entry) {
-    entry = { ids: new Set(), resolvers: [], timer: null };
-    pending.set(key, entry);
-    entry.timer = window.setTimeout(() => void flush(key, table, column, userId), WINDOW_MS);
-  }
-  entry.ids.add(id);
-  await new Promise<void>((resolve) => entry!.resolvers.push(resolve));
-  return cache.get(key)?.get(id) ?? false;
-}
-
-export function batchSet(table: string, column: string, id: string, userId: string | null | undefined, value: boolean) {
-  if (!userId) return;
-  const key = keyOf(table, column, userId);
-  const store = cache.get(key) ?? new Map<string, boolean>();
-  store.set(id, value);
-  cache.set(key, store);
+export function batchSet(table: string, col: string, id: string, userId: string, value: boolean) {
+  const k = keyOf(table, col, userId);
+  if (!cache.has(k)) cache.set(k, new Map());
+  cache.get(k)!.set(id, value);
 }
