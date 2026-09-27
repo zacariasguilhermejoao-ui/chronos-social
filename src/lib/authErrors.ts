@@ -1,8 +1,20 @@
-export function friendlyAuthError(err: any): string {
-  if (!err) return "Não foi possível iniciar sessão.";
-  if (typeof err === "string") return err;
-  if (err?.name === "AuthRetryableFetchError" || /failed to fetch|network/i.test(String(err?.message))) {
-    return "O servidor está temporariamente indisponível. Tenta novamente dentro de instantes.";
+export function isTransportError(err: any): boolean {
+  if (typeof navigator !== "undefined" && navigator.onLine === false) return true;
+  if (typeof err?.status === "number" && err.status > 0) return false;
+  const m = String(err?.message ?? "").toLowerCase();
+  return (
+    err?.name === "AuthRetryableFetchError" ||
+    err?.name === "TypeError" ||
+    /failed to fetch|load failed|networkerror|network request failed|timeout|aborted/.test(m)
+  );
+}
+
+export function authErrorMessage(err: any): string {
+  if (isTransportError(err)) {
+    const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+    return offline
+      ? "Sem ligação à internet. Liga-te à rede e tenta novamente."
+      : "O servidor está temporariamente indisponível. Tenta novamente dentro de instantes.";
   }
   const status = err?.status;
   const code = String(err?.code ?? "");

@@ -1,3 +1,7 @@
+// Conversões e formatação para a economia Chrónos
+// Internamente: 1 coin = 1 ponto = 0,01 Kz  →  100 coins = 1 Kz
+// UI pública: mostrar sempre "Pontos" (Kz fica reservado ao painel financeiro/saque).
+
 export const COINS_PER_KZ = 100;
 export const POINTS_PER_KZ = 100;
 
@@ -18,17 +22,17 @@ export const formatKz = (coins: number, opts: { decimals?: number; sign?: boolea
 
 export const formatKzCompact = (coins: number) => {
   const kz = coinsToKz(coins);
-  if (Math.abs(kz) >= 1_000_000) return `${(kz / 1_000_000).toFixed(1)}M Kz`;
-  if (Math.abs(kz) >= 1_000) return `${(kz / 1_000).toFixed(1)}k Kz`;
-  return formatKz(coins, { decimals: kz % 1 === 0 ? 0 : 2 });
+  const abs = Math.abs(kz);
+  if (abs >= 1_000_000) return `${(kz / 1_000_000).toFixed(1)}M Kz`;
+  if (abs >= 1_000) return `${(kz / 1_000).toFixed(1)}k Kz`;
+  return formatKz(coins, { decimals: 0 });
 };
 
 export const formatPoints = (coins: number, opts: { sign?: boolean } = {}) => {
-  const { sign = false } = opts;
   const pts = coinsToPoints(coins);
   const abs = Math.abs(pts);
-  const formatted = Math.round(abs).toLocaleString("pt-PT");
-  const prefix = sign && pts > 0 ? "+" : pts < 0 ? "−" : "";
+  const formatted = abs.toLocaleString("pt-PT");
+  const prefix = opts.sign && pts > 0 ? "+" : pts < 0 ? "−" : "";
   return `${prefix}${formatted} pts`;
 };
 
