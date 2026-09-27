@@ -1,8 +1,3 @@
-// Carregamento de perfis em lote.
-//
-// Cada avatar no ecrã pedia a sua própria linha em `profiles` (N+1: 20 cartões
-// = 20 pedidos). Aqui juntamos todos os pedidos feitos na mesma janela de 30ms
-// num único `in (...)`, com cache em memória para toda a sessão.
 import { supabase } from "@/integrations/supabase/client";
 
 export type MiniProfile = {
@@ -35,7 +30,6 @@ async function flush() {
       .select("id,username,display_name,avatar_url")
       .in("id", slice);
     (data ?? []).forEach((p: any) => cache.set(p.id, p as MiniProfile));
-    // ids sem resultado ficam em cache negativa para não repetir o pedido
     slice.forEach((id) => {
       if (!cache.has(id)) {
         cache.set(id, { id, username: null, display_name: null, avatar_url: null });
@@ -69,7 +63,6 @@ export function getProfile(id: string): Promise<MiniProfile | null> {
   return p;
 }
 
-/** Mantém a cache coerente quando o realtime traz um perfil atualizado. */
 export function updateProfileCache(p: Partial<MiniProfile> & { id: string }) {
   const cur = cache.get(p.id);
   cache.set(p.id, { ...(cur ?? { id: p.id, username: null, display_name: null, avatar_url: null }), ...p });

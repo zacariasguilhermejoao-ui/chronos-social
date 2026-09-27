@@ -1,11 +1,10 @@
 export type PostTheme = {
   id: string;
   label: string;
-  className: string; // aplicado ao container do post
-  textClass: string; // cor do texto
+  className: string;
+  textClass: string;
 };
 
-// 12 presets — sólidos e degradês. Idênticos em UI de post e Story.
 export const POST_THEMES: PostTheme[] = [
   { id: "sunset", label: "Sunset", className: "bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600", textClass: "text-white" },
   { id: "ocean", label: "Ocean", className: "bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700", textClass: "text-white" },

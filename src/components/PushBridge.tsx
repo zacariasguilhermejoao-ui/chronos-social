@@ -4,10 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { initOneSignal, linkPushUser, unlinkPushUser, OneSignal } from "@/lib/onesignal";
 import { initFirebasePush } from "@/lib/firebasePush";
 
-/**
- * Liga o utilizador autenticado ao OneSignal (External ID) e trata do
- * deep-link quando o utilizador toca numa notificação de mensagem.
- */
 export function PushBridge() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
