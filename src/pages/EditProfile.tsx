@@ -104,7 +104,7 @@ export default function EditProfile() {
       return;
     }
     toast.success("Perfil atualizado");
-    await refresh();
+    await refresh?.();
     navigate("/me");
   };
 
@@ -127,12 +127,14 @@ export default function EditProfile() {
           className="w-full h-40 bg-secondary/50 overflow-hidden relative group"
         >
           {coverUrl ? (
-            <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" />
+            <img src={coverUrl} alt="" className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-gradient-violet" />
+            <div className="w-full h-full grid place-items-center text-muted-foreground">
+              <ImagePlus className="w-8 h-8" />
+            </div>
           )}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity grid place-items-center">
-            <ImagePlus className="w-7 h-7 text-white" />
+            <Camera className="w-6 h-6 text-white" />
           </div>
           {uploadingCover && (
             <div className="absolute inset-0 bg-black/60 grid place-items-center">
@@ -140,22 +142,16 @@ export default function EditProfile() {
             </div>
           )}
         </button>
-        <input
-          ref={coverInput}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => onPickCover(e.target.files?.[0] ?? null)}
-        />
+        <input ref={coverInput} type="file" accept="image/*" className="hidden" onChange={(e) => onPickCover(e.target.files?.[0] ?? null)} />
 
         <button
           onClick={() => avatarInput.current?.click()}
-          className="absolute -bottom-12 left-4 w-24 h-24 rounded-3xl bg-gradient-violet shadow-violet grid place-items-center overflow-hidden border-4 border-background group"
+          className="absolute -bottom-12 left-4 w-24 h-24 rounded-full border-4 border-background overflow-hidden bg-secondary group"
         >
           {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+            <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
           ) : (
-            <span className="font-display font-bold text-3xl text-white">
+            <span className="w-full h-full grid place-items-center font-display font-bold text-3xl text-white">
               {displayName?.[0]?.toUpperCase() ?? "?"}
             </span>
           )}
@@ -168,13 +164,7 @@ export default function EditProfile() {
             </div>
           )}
         </button>
-        <input
-          ref={avatarInput}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => onPickAvatar(e.target.files?.[0] ?? null)}
-        />
+        <input ref={avatarInput} type="file" accept="image/*" className="hidden" onChange={(e) => onPickAvatar(e.target.files?.[0] ?? null)} />
       </div>
 
       <div className="px-4 pt-16 space-y-4">
@@ -184,36 +174,17 @@ export default function EditProfile() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="username">Username</Label>
-          <Input
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            maxLength={30}
-            placeholder="seu_username"
-          />
+          <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={30} placeholder="seu_username" />
           <p className="text-xs text-muted-foreground">@{username || "username"}</p>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bio">Bio</Label>
-          <Textarea
-            id="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="Conta algo sobre ti..."
-            maxLength={200}
-            rows={3}
-          />
+          <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Conta algo sobre ti..." maxLength={200} rows={3} />
           <p className="text-xs text-muted-foreground text-right">{bio.length}/200</p>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="loc">Localização</Label>
-          <Input
-            id="loc"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            maxLength={80}
-            placeholder="Luanda, Angola"
-          />
+          <Input id="loc" value={location} onChange={(e) => setLocation(e.target.value)} maxLength={80} placeholder="Luanda, Angola" />
         </div>
 
         <Button
