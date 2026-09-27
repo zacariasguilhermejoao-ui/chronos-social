@@ -64,7 +64,7 @@ export default function Posts() {
     setPosts((prev) => [...prev, ...withProfiles]);
     setHasMore((data?.length ?? 0) === PAGE_SIZE);
     setLoadingMore(false);
-  }, [posts.length, loadingMore, hasMore, enrich]);
+  }, [loadingMore, hasMore, posts.length, enrich]);
 
   useEffect(() => {
     loadInitial();
@@ -78,7 +78,6 @@ export default function Posts() {
       async (payload) => {
         const p = payload.new as Photo;
         if (!p?.id || !p.image_url) return;
-        setPosts((prev) => (prev.some((x) => x.id === p.id) ? prev : prev));
         const enriched = await enrich([p]);
         setPosts((prev) => (prev.some((x) => x.id === p.id) ? prev : [enriched[0], ...prev]));
       }

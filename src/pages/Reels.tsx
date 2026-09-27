@@ -8,7 +8,7 @@ import { ReelItem } from "@/components/reels/ReelItem";
 export default function Reels() {
   const { user } = useAuth();
   const [params] = useSearchParams();
-  const startId = params.get("start");
+  const startId = params.get("start") ?? params.get("v");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<FeedPage["cursor"]>(null);
@@ -59,9 +59,8 @@ export default function Reels() {
   const loadMore = useCallback(async () => {
     if (loadingMoreRef.current || doneRef.current || !cursorRef.current) return;
     loadingMoreRef.current = true;
-    const ac = new AbortController();
     try {
-      const page = await fetchFeedPage(cursorRef.current, ac.signal);
+      const page = await fetchFeedPage(cursorRef.current);
       cursorRef.current = page.cursor;
       if (page.rows.length === 0) doneRef.current = true;
       setVideos((prev) => {
