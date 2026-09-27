@@ -1,10 +1,3 @@
-/**
- * Chrónos — Sistema de temas (claro / escuro / automático)
- * ---------------------------------------------------------
- * • Todas as cores vivem em variáveis CSS (ver src/index.css).
- * • Preferência guardada no dispositivo (localStorage) e na conta (profiles.theme).
- * • Sem "flash": o tema é aplicado por um script inline no index.html.
- */
 import { supabase } from "@/integrations/supabase/client";
 import { useCallback, useEffect, useState } from "react";
 
@@ -53,7 +46,6 @@ export function applyTheme(choice: ThemeChoice, animate = true) {
   if (meta) meta.setAttribute("content", resolved === "light" ? "#FAFAFA" : "#090909");
 }
 
-/** Muda o tema: aplica, guarda no dispositivo e sincroniza com a conta. */
 export async function setTheme(choice: ThemeChoice, opts: { persistRemote?: boolean } = {}) {
   const { persistRemote = true } = opts;
   current = choice;
@@ -76,7 +68,6 @@ export function getTheme(): ThemeChoice {
   return current;
 }
 
-/** Lê a preferência guardada na conta e aplica-a (uma vez por sessão). */
 export async function syncThemeFromAccount() {
   try {
     const { data } = await supabase.auth.getUser();
@@ -138,7 +129,6 @@ export function useTheme() {
   return { theme, resolved, setTheme: change, toggle };
 }
 
-/** Sincroniza o tema da conta sempre que a sessão muda. */
 export function useThemeSync() {
   useEffect(() => {
     applyTheme(current, false);
