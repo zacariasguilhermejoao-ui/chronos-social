@@ -87,9 +87,11 @@ export default function NotificationsPage() {
         <p className="text-center text-sm text-muted-foreground py-12">A carregar...</p>
       ) : items.length === 0 ? (
         <div className="glass rounded-2xl p-8 text-center mt-6">
-          <Bell className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-          <p className="font-semibold">Sem notificações</p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-violet grid place-items-center mx-auto mb-3">
+            <Bell className="w-8 h-8 text-white" />
+          </div>
+          <p className="font-semibold mb-1">Tudo em dia</p>
+          <p className="text-xs text-muted-foreground">
             Aqui aparecem as tuas notificações: gostos, comentários, seguidores, mensagens, grupos e ganhos.
           </p>
         </div>
