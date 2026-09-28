@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export type Prefs = {
+type Prefs = {
   largeText: boolean;
   highContrast: boolean;
   reduceMotion: boolean;
@@ -95,9 +95,10 @@ export function usePrefs() {
 
 export function vibrate(ms = 20) {
   try {
-    if (!current.vibration) return;
+    const p = current;
+    if (!p.vibration) return;
     if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      navigator.vibrate(ms);
+      (navigator as any).vibrate(ms);
     }
   } catch {}
 }

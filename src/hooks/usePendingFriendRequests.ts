@@ -23,14 +23,16 @@ export function usePendingFriendRequests() {
     refresh();
     if (!user) return;
     const ch = supabase
-      .channel(`friend-req-${user.id}`)
+      .channel(`pending-friends-${user.id}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "friendships", filter: `addressee_id=eq.${user.id}` },
-        () => refresh(),
+        () => refresh()
       )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user, refresh]);
 
   return count;
