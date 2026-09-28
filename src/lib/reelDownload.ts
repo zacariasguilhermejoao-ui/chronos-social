@@ -1,16 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
 
-type EdgeResponse = {
-  status: "ready" | "processing" | "pending" | "failed" | "unavailable";
-  url?: string;
-  error?: string | null;
-};
+export type DownloadStatus = "pending" | "processing" | "ready" | "failed" | "unavailable";
+
+type EdgeResponse = { status?: DownloadStatus; url?: string | null; error?: string | null };
 
 async function callEdge(body: Record<string, unknown>): Promise<EdgeResponse> {
-  const { data, error } = await supabase.functions.invoke("process-reel", { body });
-  if (error) {
-    return { status: "failed", error: error.message };
-  }
+  const { data, error } = await supabase.functions.invoke("reel-download", { body });
+  if (error) return { status: "failed", error: error.message };
   return (data ?? {}) as EdgeResponse;
 }
 
@@ -30,9 +26,7 @@ async function saveFile(blob: Blob, filename: string) {
     try {
       await nav.share({ files: [file] });
       return;
-    } catch {
-      /* cancel */
-    }
+    } catch {}
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -51,21 +45,21 @@ export type DownloadResult =
   | { result: "failed"; error?: string | null }
   | { result: "unavailable" };
 
-export async function downloadReel(videoId: string, filename: string): Promise<DownloadResult> {
-  const res = await callEdge({ video_id: videoId, action: "request", filename });
-
-  if (res.status === "ready" && res.url) {
-    try {
-      const r = await fetch(res.url);
-      if (!r.ok) return { result: "failed", error: `http_${r.status}` };
-      await saveFile(await r.blob(), filename);
-      return { result: "saved" };
-    } catch (e) {
-      return { result: "failed", error: String(e) };
-    }
+export async function downloadReel(videoId: string, filename = "chronos-reel.mp4"): Promise<DownloadResult> {
+  let status = await getDownloadStatus(videoId);
+  if (status.status === "unavailable") return { result: "unavailable" };
+  if (status.status !== "ready") {
+    status = await requestReelProcessing(videoId);
+    if (status.status === "processing" || status.status === "pending") return { result: "processing" };
+    if (status.status !== "ready" || !status.url) return { result: "failed", error: status.error };
   }
-
-  if (res.status === "processing" || res.status === "pending") return { result: "processing" };
-  if (res.status === "unavailable" || res.error === "worker_not_configured") return { result: "unavailable" };
-  return { result: "failed", error: res.error ?? null };
+  if (!status.url) return { result: "failed", error: "Sem URL" };
+  try {
+    const res = await fetch(status.url);
+    const blob = await res.blob();
+    await saveFile(blob, filename);
+    return { result: "saved" };
+  } catch (e: any) {
+    return { result: "failed", error: e?.message };
+  }
 }
