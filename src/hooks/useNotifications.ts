@@ -2,21 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-export type Notification = {
+type Notification = {
   id: string;
   user_id: string;
   actor_id: string | null;
   type: string;
   body: string | null;
-  link: string | null;
+  data: any;
   read_at: string | null;
   created_at: string;
-  actor?: {
-    id: string;
-    username: string;
-    display_name: string;
-    avatar_url: string | null;
-  } | null;
+  actor?: { id: string; username: string; display_name: string; avatar_url: string | null };
 };
 
 export function useUnreadNotifications() {
