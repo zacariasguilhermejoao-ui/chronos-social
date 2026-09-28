@@ -17,13 +17,10 @@ export default function Stories() {
           <Plus className="w-4 h-4 mr-1" /> Novo
         </Button>
       </div>
-
       <StoriesRail />
-
       <p className="text-xs text-muted-foreground text-center pt-4">
         Os stories desaparecem após 24 horas. Toca num círculo para abrir.
       </p>
-
       {creating && <StoryCreate onClose={() => setCreating(false)} />}
     </div>
   );
