@@ -1,16 +1,19 @@
-# Chrónos — App Android e iOS (Capacitor)
+# Chrónos — App nativa Android e iOS
 
-Domínio de produção: **https://chronossocial.com**  
-App ID: `com.chronossocial.app`
+A app **não abre o site**. O código web é compilado para `dist/` e embutido na app nativa (Capacitor).
+
+- App ID: `com.chronossocial.app`
+- Nome: **Chrónos**
+- Conteúdo: pasta `dist/` (depois de `npm run build`)
 
 ## Requisitos
 
-| Plataforma | Precisas de |
-|------------|-------------|
-| **Android** | PC com [Android Studio](https://developer.android.com/studio) |
-| **iOS** | **Mac** com [Xcode](https://developer.apple.com/xcode/) |
+| Plataforma | Precisas |
+|------------|----------|
+| Android | [Android Studio](https://developer.android.com/studio) |
+| iOS | **Mac** + [Xcode](https://developer.apple.com/xcode/) |
 
-## 1. Preparar
+## Passos
 
 ```bash
 git clone https://github.com/zacariasguilhermejoao-ui/chronos-social.git
@@ -19,29 +22,44 @@ npm install
 git pull
 ```
 
-Confirma `.env.local` com Supabase.
+Garante `.env.local` com:
 
-## 2. Adicionar plataformas (primeira vez)
+```
+VITE_SUPABASE_URL=https://tdehdxwdechsadpfencc.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=a_tua_anon_key
+```
+
+### Primeira vez — criar projetos nativos
 
 ```bash
 npx cap add android
 npx cap add ios
 ```
 
-## 3. Sincronizar e abrir
+### Sempre que mudares código
 
 ```bash
 npm run mobile:sync
-npm run mobile:android   # Android Studio → Run → APK
-npm run mobile:ios       # Xcode (só Mac)
+# = npm run build + npx cap sync
 ```
 
-A app nativa abre **https://chronossocial.com**.
+Isto:
+1. Compila a app React para `dist/`
+2. Copia `dist/` para dentro de `android/` e `ios/`
 
-## Scripts
+### Abrir e instalar
 
-| Comando | Função |
-|---------|--------|
-| `npm run mobile:sync` | build + cap sync |
-| `npm run mobile:android` | abre Android Studio |
-| `npm run mobile:ios` | abre Xcode |
+```bash
+npm run mobile:android   # Android Studio → Run (▶) → APK no telemóvel
+npm run mobile:ios       # Xcode (só Mac) → Run
+```
+
+## Importante
+
+- **Não há `server.url`** — a app não carrega chronossocial.com.
+- A app fala com o **Supabase** pela internet (API), como qualquer app nativa com backend.
+- As chaves do `.env.local` entram no build (`VITE_...`); volta a fazer `npm run mobile:sync` se mudares o `.env.local`.
+
+## Gerar APK de release (Android)
+
+No Android Studio: **Build → Generate Signed Bundle / APK**.

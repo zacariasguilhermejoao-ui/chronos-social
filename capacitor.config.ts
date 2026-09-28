@@ -1,17 +1,15 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * Chrónos — Capacitor (Android + iOS)
- * Domínio de produção: https://chronossocial.com
+ * Chrónos — App nativa (Android + iOS)
+ * O HTML/JS fica DENTRO da app (pasta dist/).
+ * NÃO abre chronossocial.com nem qualquer URL externa.
  */
 const config: CapacitorConfig = {
   appId: "com.chronossocial.app",
   appName: "Chrónos",
   webDir: "dist",
-  server: {
-    url: "https://chronossocial.com",
-    cleartext: false,
-  },
+  // sem "server.url" = conteúdo nativo embutido
   android: {
     backgroundColor: "#090909",
     allowMixedContent: true,
