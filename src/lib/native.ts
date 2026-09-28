@@ -1,6 +1,5 @@
-/** Desativa zoom, long-press e selecção de texto na app (estilo nativo). */
-export function installNativeGuards() {
-  if (typeof document === "undefined") return () => {};
+export function installNativeBehaviour() {
+  if (typeof document === "undefined") return;
 
   const isEditableTarget = (t: EventTarget | null) => {
     const el = t as HTMLElement | null;
@@ -39,14 +38,13 @@ export function installNativeGuards() {
   document.addEventListener("gesturechange", onGesture as EventListener);
   document.addEventListener("touchend", onTouchEnd, { passive: false });
   document.addEventListener("touchmove", onTouchMove, { passive: false });
+}
 
-  return () => {
-    document.removeEventListener("contextmenu", onContextMenu);
-    document.removeEventListener("dragstart", onDragStart);
-    document.removeEventListener("selectstart", onSelectStart);
-    document.removeEventListener("gesturestart", onGesture as EventListener);
-    document.removeEventListener("gesturechange", onGesture as EventListener);
-    document.removeEventListener("touchend", onTouchEnd);
-    document.removeEventListener("touchmove", onTouchMove);
-  };
+export function haptic(style: "light" | "medium" | "heavy" = "light") {
+  try {
+    if (navigator.vibrate) {
+      const ms = style === "heavy" ? 30 : style === "medium" ? 15 : 8;
+      navigator.vibrate(ms);
+    }
+  } catch {}
 }

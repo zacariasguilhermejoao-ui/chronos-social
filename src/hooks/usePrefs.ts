@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-type Prefs = {
+export type Prefs = {
   largeText: boolean;
   highContrast: boolean;
   reduceMotion: boolean;
@@ -57,48 +57,34 @@ function load(): Prefs {
   }
 }
 
-function applyToDOM(p: Prefs) {
-  if (typeof document === "undefined") return;
-  const root = document.documentElement;
-  root.classList.toggle("a11y-large-text", p.largeText);
-  root.classList.toggle("a11y-high-contrast", p.highContrast);
-  root.classList.toggle("a11y-reduce-motion", p.reduceMotion);
+function save(p: Prefs) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(p));
+  } catch {}
 }
 
-let listeners: Array<(p: Prefs) => void> = [];
-let current: Prefs = typeof window !== "undefined" ? load() : DEFAULTS;
-if (typeof window !== "undefined") applyToDOM(current);
-
 export function usePrefs() {
-  const [prefs, setPrefs] = useState<Prefs>(current);
+  const [prefs, setPrefs] = useState<Prefs>(load);
 
   useEffect(() => {
-    const fn = (p: Prefs) => setPrefs(p);
-    listeners.push(fn);
-    return () => {
-      listeners = listeners.filter((l) => l !== fn);
-    };
-  }, []);
+    const root = document.documentElement;
+    root.classList.toggle("a11y-large-text", prefs.largeText);
+    root.classList.toggle("a11y-high-contrast", prefs.highContrast);
+    root.classList.toggle("a11y-reduce-motion", prefs.reduceMotion);
+  }, [prefs]);
 
-  const update = useCallback((patch: Partial<Prefs> | ((p: Prefs) => Prefs)) => {
-    const next = typeof patch === "function" ? patch(current) : { ...current, ...patch };
-    current = next;
-    try {
-      localStorage.setItem(KEY, JSON.stringify(next));
-    } catch {}
-    applyToDOM(next);
-    listeners.forEach((l) => l(next));
+  const update = useCallback((patch: Partial<Prefs>) => {
+    setPrefs((prev) => {
+      const next = {
+        ...prev,
+        ...patch,
+        notifications: { ...prev.notifications, ...(patch.notifications ?? {}) },
+        privacy: { ...prev.privacy, ...(patch.privacy ?? {}) },
+      };
+      save(next);
+      return next;
+    });
   }, []);
 
   return { prefs, update };
-}
-
-export function vibrate(ms = 20) {
-  try {
-    const p = current;
-    if (!p.vibration) return;
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      (navigator as any).vibrate(ms);
-    }
-  } catch {}
 }
