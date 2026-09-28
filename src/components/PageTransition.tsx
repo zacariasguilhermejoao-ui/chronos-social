@@ -1,10 +1,36 @@
-import { ReactNode } from "react";
-import { useLocation } from "react-router-dom";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
+
+const positions = new Map<string, number>();
 
 export function PageTransition({ children }: { children: ReactNode }) {
-  const loc = useLocation();
+  const location = useLocation();
+  const navType = useNavigationType();
+  const key = location.pathname + location.search;
+  const prevKey = useRef(key);
+  const [anim, setAnim] = useState(false);
+
+  useEffect(() => {
+    if (prevKey.current !== key) {
+      positions.set(prevKey.current, window.scrollY);
+      prevKey.current = key;
+    }
+    setAnim(true);
+    const t = window.setTimeout(() => setAnim(false), 240);
+
+    const y = navType === "POP" ? positions.get(key) ?? 0 : 0;
+    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y)));
+    return () => window.clearTimeout(t);
+  }, [key, navType]);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   return (
-    <div key={loc.pathname} className="animate-fade-in">
+    <div key={key} className={anim ? "page-enter" : undefined}>
       {children}
     </div>
   );
