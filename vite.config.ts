@@ -2,8 +2,11 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
-// Chrónos — Vite (sem Lovable)
+// base: /chronos-social/ no GitHub Pages; / em domínio próprio
+const base = process.env.VITE_BASE || "/";
+
 export default defineConfig(({ mode }) => ({
+  base,
   server: {
     host: true,
     port: 5173,
