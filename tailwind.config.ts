@@ -67,21 +67,34 @@ export default {
         "gradient-card": "var(--gradient-card)",
       },
       boxShadow: {
+        soft: "var(--shadow-soft)",
+        elevated: "var(--shadow-elevated)",
         money: "var(--shadow-money)",
         violet: "var(--shadow-violet)",
-        soft: "var(--shadow-soft)",
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
-        "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
-        "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
-        "fade-in": { "0%": { opacity: "0", transform: "translateY(8px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
         "slide-up": { "0%": { transform: "translateY(100%)" }, "100%": { transform: "translateY(0)" } },
-        "slide-down": { "0%": { transform: "translateY(-120%)", opacity: "0" }, "100%": { transform: "translateY(0)", opacity: "1" } },
+        "slide-down": {
+          "0%": { transform: "translateY(-120%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
         "sound-pop": {
           "0%": { opacity: "0", transform: "scale(0.6)" },
           "30%": { opacity: "1", transform: "scale(1.1)" },
@@ -95,9 +108,7 @@ export default {
         "fade-in": "fade-in 0.4s ease-out",
         "slide-up": "slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         "slide-down": "slide-down 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
-        "sound-pop": "sound-pop 0.7s ease-out forwards",
-        "spin-slow": "spin 4s linear infinite",
-        "coin-pop": "fade-in 0.6s ease-out",
+        "sound-pop": "sound-pop 0.7s ease-out",
       },
     },
   },

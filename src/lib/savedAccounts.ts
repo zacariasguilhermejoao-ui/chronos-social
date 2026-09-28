@@ -2,7 +2,7 @@ import type { Session } from "@supabase/supabase-js";
 
 export type SavedAccount = {
   identifier: string;
-  label: string;
+  displayName?: string | null;
   userId?: string | null;
   avatarUrl?: string | null;
   refreshToken?: string | null;
