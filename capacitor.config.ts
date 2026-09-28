@@ -2,19 +2,15 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
  * Chrónos — Capacitor (Android + iOS)
- *
- * server.url = app online (Lovable / domínio).
- * Quando tiveres domínio próprio, troca a URL abaixo.
- * Para app offline (webDir), comenta o bloco server e faz: npm run build && npx cap sync
+ * Domínio de produção: https://chronossocial.com
  */
 const config: CapacitorConfig = {
   appId: "com.chronossocial.app",
   appName: "Chrónos",
   webDir: "dist",
   server: {
-    // App online no Lovable — a app nativa abre este site
-    url: "https://1549f2d2-e51c-4319-95f3-9875a7192b52.lovableproject.com?forceHideBadge=true",
-    cleartext: true,
+    url: "https://chronossocial.com",
+    cleartext: false,
   },
   android: {
     backgroundColor: "#090909",
