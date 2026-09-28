@@ -1,56 +1,31 @@
-/**
- * Camada de comportamento "app nativa" da Chrónos.
- * Bloqueia comportamentos típicos de browser (menu de contexto, arrastar,
- * seleção por toque longo, zoom por duplo toque/pinça) mantendo campos de
- * texto totalmente funcionais (copiar/colar/selecionar).
- */
+/** Desativa zoom, long-press e selecção de texto na app (estilo nativo). */
+export function installNativeGuards() {
+  if (typeof document === "undefined") return () => {};
 
-const EDITABLE_SELECTOR =
-  'input, textarea, select, [contenteditable=""], [contenteditable="true"], .allow-select, .selectable';
-
-export function isEditableTarget(target: EventTarget | null): boolean {
-  const el = target as HTMLElement | null;
-  if (!el || typeof el.closest !== "function") return false;
-  return !!el.closest(EDITABLE_SELECTOR);
-}
-
-/** Vibração curta em ações importantes (ignorada quando não suportada). */
-export function haptic(pattern: number | number[] = 12) {
-  try {
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      navigator.vibrate(pattern);
-    }
-  } catch {
-    /* noop */
-  }
-}
-
-export function installNativeBehaviour() {
-  if (typeof window === "undefined") return () => {};
+  const isEditableTarget = (t: EventTarget | null) => {
+    const el = t as HTMLElement | null;
+    if (!el) return false;
+    const tag = el.tagName;
+    return tag === "INPUT" || tag === "TEXTAREA" || el.isContentEditable;
+  };
 
   const onContextMenu = (e: Event) => {
     if (!isEditableTarget(e.target)) e.preventDefault();
   };
-
   const onDragStart = (e: Event) => {
     if (!isEditableTarget(e.target)) e.preventDefault();
   };
-
   const onSelectStart = (e: Event) => {
     if (!isEditableTarget(e.target)) e.preventDefault();
   };
-
   const onGesture = (e: Event) => e.preventDefault();
 
   let lastTouchEnd = 0;
   const onTouchEnd = (e: TouchEvent) => {
     const now = Date.now();
-    if (now - lastTouchEnd < 300 && !isEditableTarget(e.target)) {
-      e.preventDefault();
-    }
+    if (now - lastTouchEnd < 300 && !isEditableTarget(e.target)) e.preventDefault();
     lastTouchEnd = now;
   };
-
   const onTouchMove = (e: TouchEvent) => {
     if (e.touches.length > 1 && !(e.target as HTMLElement)?.closest?.(".allow-zoom")) {
       e.preventDefault();

@@ -1,38 +1,48 @@
-/**
- * Cache de ecrã em memória (dura toda a sessão da app, sobrevive a
- * desmontagens de rota). Serve para o padrão:
- *   mostrar já o que existe → revalidar em segundo plano.
- *
- * Não substitui a base de dados nem guarda nada sensível: só o último
- * snapshot renderizado por ecrã, mais a posição de scroll.
- */
-type Entry<T> = { data: T; at: number };
+type Entry<T> = { data: T; age: number };
 
-const store = new Map<string, Entry<unknown>>();
-const scroll = new Map<string, number>();
+const store = new Map<string, Entry<any>>();
 
-export function readView<T>(key: string): { data: T; age: number } | null {
-  const e = store.get(key) as Entry<T> | undefined;
-  if (!e) return null;
-  return { data: e.data, age: Date.now() - e.at };
+export function readView<T>(key: string): Entry<T> | null {
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Entry<T>;
+      store.set(key, parsed);
+      return parsed;
+    }
+  } catch {}
+  return store.get(key) ?? null;
 }
 
 export function writeView<T>(key: string, data: T) {
-  store.set(key, { data, at: Date.now() });
+  const entry = { data, age: Date.now() };
+  store.set(key, entry);
+  try {
+    sessionStorage.setItem(key, JSON.stringify(entry));
+  } catch {}
+}
+
+export function isStale(age: number, maxMs: number) {
+  return Date.now() - age > maxMs;
 }
 
 export function invalidateView(key: string) {
   store.delete(key);
+  try {
+    sessionStorage.removeItem(key);
+  } catch {}
 }
 
-export function isStale(age: number, ttlMs: number) {
-  return age > ttlMs;
-}
-
-export function saveScroll(key: string, y: number) {
-  scroll.set(key, y);
+export function saveScroll(key: string) {
+  try {
+    sessionStorage.setItem(`scroll:${key}`, String(window.scrollY));
+  } catch {}
 }
 
 export function readScroll(key: string): number {
-  return scroll.get(key) ?? 0;
+  try {
+    return parseInt(sessionStorage.getItem(`scroll:${key}`) ?? "0", 10) || 0;
+  } catch {
+    return 0;
+  }
 }
