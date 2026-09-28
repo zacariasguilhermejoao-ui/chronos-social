@@ -3,60 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Chrónos — Conecta. Partilha. Cria.</title>
-  <meta name="theme-color" content="#090909" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Chrónos</title>
+  <meta name="theme-color" content="#111111" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100dvh;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      background: #090909;
-      color: #f5f5f5;
+    html, body {
+      margin: 0; padding: 0;
+      min-height: 100%;
+      background: #111 !important;
+      color: #fff !important;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .wrap {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 32px 20px;
       text-align: center;
     }
     .logo {
-      width: 72px; height: 72px;
-      border-radius: 18px;
-      background: linear-gradient(145deg, #22ff88, #0a7a4a);
-      display: grid; place-items: center;
-      font-size: 36px; font-weight: 800; color: #090909;
-      margin-bottom: 20px;
-      box-shadow: 0 0 40px rgba(34, 255, 136, 0.35);
+      width: 88px; height: 88px;
+      border-radius: 22px;
+      background: #22ff88;
+      color: #000;
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 88px;
+      margin-bottom: 24px;
     }
-    h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
-    p { margin-top: 10px; color: #a3a3a3; max-width: 320px; line-height: 1.5; font-size: 0.95rem; }
+    h1 { font-size: 32px; margin: 0 0 12px; color: #fff; }
+    p { font-size: 16px; color: #ccc; margin: 0 0 8px; max-width: 300px; }
     .btn {
       margin-top: 28px;
-      display: inline-block;
-      padding: 12px 28px;
-      border-radius: 999px;
       background: #22ff88;
-      color: #090909;
-      font-weight: 700;
+      color: #000;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px 32px;
+      border-radius: 999px;
       text-decoration: none;
-      font-size: 0.95rem;
+      display: inline-block;
     }
-    .btn:active { transform: scale(0.98); }
-    .muted { margin-top: 16px; font-size: 0.8rem; color: #666; }
-    a.muted-link { color: #22ff88; text-decoration: none; }
+    .ok {
+      margin-top: 20px;
+      padding: 10px 16px;
+      background: #1a3d2a;
+      border: 1px solid #22ff88;
+      border-radius: 12px;
+      color: #22ff88;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div class="logo">C</div>
-  <h1>Chrónos</h1>
-  <p>Conecta. Partilha. Cria.<br/>Site no GitHub Pages — sem Lovable.</p>
-  <a class="btn" href="https://github.com/zacariasguilhermejoao-ui/chronos-social">Ver código no GitHub</a>
-  <p class="muted">
-    App completa: ativa <strong>Actions → Deploy GitHub Pages</strong><br/>
-    e mete os secrets do Supabase.
-  </p>
-  <p class="muted" style="margin-top:8px">
-    <a class="muted-link" href="https://github.com/zacariasguilhermejoao-ui/chronos-social/actions">Abrir Actions</a>
-  </p>
+  <div class="wrap">
+    <div class="logo">C</div>
+    <h1>Chrónos</h1>
+    <p>Conecta. Partilha. Cria.</p>
+    <p>Site no GitHub — sem Lovable.</p>
+    <div class="ok">✓ Página a funcionar</div>
+    <a class="btn" href="https://github.com/zacariasguilhermejoao-ui/chronos-social">Código no GitHub</a>
+  </div>
 </body>
 </html>
