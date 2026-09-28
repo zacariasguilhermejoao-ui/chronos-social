@@ -1,20 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
+// Chrónos — Vite (sem Lovable)
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
-    port: 8080,
-    hmr: {
-      overlay: false,
-    },
+    host: true,
+    port: 5173,
+    hmr: { overlay: false },
   },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-  ].filter(Boolean),
+  plugins: [react()],
   resolve: {
     alias: [
       {
@@ -23,7 +18,14 @@ export default defineConfig(({ mode }) => ({
       },
       { find: "@", replacement: path.resolve(__dirname, "./src") },
     ],
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
   esbuild:
     mode === "production"
@@ -31,6 +33,7 @@ export default defineConfig(({ mode }) => ({
       : undefined,
   build: {
     target: "es2020",
+    outDir: "dist",
     cssCodeSplit: true,
     chunkSizeWarningLimit: 800,
     minify: "esbuild",

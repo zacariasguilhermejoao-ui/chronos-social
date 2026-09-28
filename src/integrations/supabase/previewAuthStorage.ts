@@ -1,4 +1,7 @@
-/** Storage de auth para preview embutido (Lovable). Em produção usa localStorage. */
-export function brokeredPreviewStorage(): Storage {
+/**
+ * Storage de auth — só localStorage (sem Lovable / preview broker).
+ */
+export function brokeredPreviewStorage(): Storage | undefined {
+  if (typeof window === "undefined") return undefined;
   return localStorage;
 }
