@@ -1,8 +1,26 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import VideoCard, { type Video } from "@/components/VideoCard";
 
-/** Redireciona /v/:id para o player de reels com o vídeo focado. */
 export default function VideoView() {
-  const { id } = useParams<{ id: string }>();
-  if (!id) return <Navigate to="/" replace />;
-  return <Navigate to={`/reels?v=${id}`} replace />;
+  const { id } = useParams();
+  const [video, setVideo] = useState<Video | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    (async () => {
+      const { data } = await supabase.from("videos").select("*").eq("id", id).maybeSingle();
+      if (!data) return;
+      const { data: prof } = await supabase.from("profiles").select("username,display_name,avatar_url").eq("id", data.user_id).maybeSingle();
+      setVideo({ ...(data as any), profile: prof });
+    })();
+  }, [id]);
+
+  if (!video) return <div className="p-8 text-center text-muted-foreground">A carregar…</div>;
+  return (
+    <div className="max-w-2xl mx-auto px-3 py-4">
+      <VideoCard video={video} />
+    </div>
+  );
 }
