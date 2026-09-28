@@ -1,3 +1,8 @@
+/**
+ * Registo do Service Worker da Chrónos (PWA).
+ * Só em produção; kill switch: ?sw=off
+ */
+
 const SW_URL = "/service-worker.js";
 
 function inIframe() {
@@ -8,40 +13,29 @@ function inIframe() {
   }
 }
 
-function isBlockedHost() {
-  const h = window.location.hostname;
-  return (
-    h.startsWith("id-preview--") ||
-    h.startsWith("preview--") ||
-    h === "lovableproject.com" ||
-    h.endsWith(".lovableproject.com") ||
-    h === "lovableproject-dev.com" ||
-    h.endsWith(".lovableproject-dev.com") ||
-    h === "beta.lovable.dev" ||
-    h.endsWith(".beta.lovable.dev")
-  );
-}
-
 async function unregisterAppSW() {
   if (!("serviceWorker" in navigator)) return;
   const regs = await navigator.serviceWorker.getRegistrations();
   await Promise.allSettled(
     regs
       .filter((r) => {
-        const url = r.active?.scriptURL || r.waiting?.scriptURL || r.installing?.scriptURL || "";
+        const url =
+          r.active?.scriptURL || r.waiting?.scriptURL || r.installing?.scriptURL || "";
         return url.includes("/service-worker.js") || url.includes("/sw.js");
       })
-      .map((r) => r.unregister())
+      .map((r) => r.unregister()),
   );
 }
 
 export async function registerAppSW() {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+
   const swOff = new URLSearchParams(window.location.search).get("sw") === "off";
-  if (!import.meta.env.PROD || inIframe() || isBlockedHost() || swOff) {
+  if (!import.meta.env.PROD || inIframe() || swOff) {
     await unregisterAppSW();
     return;
   }
+
   try {
     const reg = await navigator.serviceWorker.register(SW_URL, { scope: "/" });
     const check = () => reg.update().catch(() => {});
@@ -58,5 +52,7 @@ export async function registerAppSW() {
         }
       });
     });
-  } catch {}
+  } catch {
+    /* app funciona sem SW */
+  }
 }
