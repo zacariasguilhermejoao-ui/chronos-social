@@ -1,0 +1,3 @@
+-- Firebase / FCM push integration notes
+-- Tokens guardados em public.push_tokens
+-- Edge function send-chat-push envia via FCM server key

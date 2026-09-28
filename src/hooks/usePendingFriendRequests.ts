@@ -7,10 +7,7 @@ export function usePendingFriendRequests() {
   const [count, setCount] = useState(0);
 
   const refresh = useCallback(async () => {
-    if (!user) {
-      setCount(0);
-      return;
-    }
+    if (!user) { setCount(0); return; }
     const { count: c } = await supabase
       .from("friendships")
       .select("id", { count: "exact", head: true })
@@ -21,19 +18,7 @@ export function usePendingFriendRequests() {
 
   useEffect(() => {
     refresh();
-    if (!user) return;
-    const ch = supabase
-      .channel(`pending-friends-${user.id}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "friendships", filter: `addressee_id=eq.${user.id}` },
-        () => refresh()
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [user, refresh]);
+  }, [refresh]);
 
-  return count;
+  return { count, refresh };
 }

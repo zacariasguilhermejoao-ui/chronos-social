@@ -1,0 +1,2 @@
+-- Trigger de push (notificações) — ver também 08_firebase_push.sql
+-- Placeholder: aplica a migration completa do projeto Supabase quando disponível.
