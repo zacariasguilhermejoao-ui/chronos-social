@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Chrónos — Conecta. Partilha. Cria.</title>
+  <meta name="theme-color" content="#090909" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #090909;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .logo {
+      width: 72px; height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #22ff88, #0a7a4a);
+      display: grid; place-items: center;
+      font-size: 36px; font-weight: 800; color: #090909;
+      margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(34, 255, 136, 0.35);
+    }
+    h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
+    p { margin-top: 10px; color: #a3a3a3; max-width: 320px; line-height: 1.5; font-size: 0.95rem; }
+    .btn {
+      margin-top: 28px;
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 999px;
+      background: #22ff88;
+      color: #090909;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .btn:active { transform: scale(0.98); }
+    .muted { margin-top: 16px; font-size: 0.8rem; color: #666; }
+    a.muted-link { color: #22ff88; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="logo">C</div>
+  <h1>Chrónos</h1>
+  <p>Conecta. Partilha. Cria.<br/>Site no GitHub Pages — sem Lovable.</p>
+  <a class="btn" href="https://github.com/zacariasguilhermejoao-ui/chronos-social">Ver código no GitHub</a>
+  <p class="muted">
+    App completa: ativa <strong>Actions → Deploy GitHub Pages</strong><br/>
+    e mete os secrets do Supabase.
+  </p>
+  <p class="muted" style="margin-top:8px">
+    <a class="muted-link" href="https://github.com/zacariasguilhermejoao-ui/chronos-social/actions">Abrir Actions</a>
+  </p>
+</body>
+</html>
