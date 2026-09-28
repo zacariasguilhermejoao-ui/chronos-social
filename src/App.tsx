@@ -122,7 +122,7 @@ const App = () => {
     <TooltipProvider>
       <Sonner theme={resolved} position="top-center" />
       <OfflineBanner />
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <PushBridge />
         <PageTransition>
         <Suspense fallback={<RouteFallback />}>
